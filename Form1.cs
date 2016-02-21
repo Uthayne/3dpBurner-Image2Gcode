@@ -15,7 +15,6 @@
 */
 //Form 1 (Main form)
 
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,7 +34,7 @@ namespace _3dpBurnerImage2Gcode
 {
     public partial class Form1 : Form
     {
-        const string ver = "v0.5";
+        const string ver = "v0.6";
         Bitmap originalImage;
         Bitmap adjustedImage;
         float lastValue;//Aux for apply processing to image only when a new value is detected
@@ -662,7 +661,7 @@ namespace _3dpBurnerImage2Gcode
            
             if (sz != lastSz)//Add power value to line if is diferent from previous
             {
-                szStr = szChar + sz.ToString("F4") + "\r";
+                szStr = szChar + sz.ToString("F4", CultureInfo.InvariantCulture) + "\r";
                 //szStr = szChar + Convert.ToString(sz) + "\r";
                 line += szStr;
             }
