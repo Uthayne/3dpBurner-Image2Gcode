@@ -814,12 +814,8 @@ namespace _3dpBurnerImage2Gcode
                         coordX = resol * (float)col;
                         //Power value
                         Color cl = adjustedImage.GetPixel(col, (adjustedImage.Height - 1) - lin);//Get pixel color
-
-                        if (cl.R < 0.15 * 255) { sz = 0; }
-
-                        else { 
+                       
                         sz = 255 - cl.R;
-                        }
 
                         sz = interpolate(sz, float.Parse(tbLaserMin.Text), float.Parse(tbLaserMax.Text));
                         //sz = interpolate(sz, Convert.ToInt32(tbLaserMax.Text), Convert.ToInt32(tbLaserMax.Text));
@@ -860,14 +856,8 @@ namespace _3dpBurnerImage2Gcode
                         coordX = resol * (float)col;
                         //Power value
                         Color cl = adjustedImage.GetPixel(col, (adjustedImage.Height - 1) - lin);//Get pixel color
+                        
                         sz = 255 - cl.R;
-
-                        if (cl.R < 0.15 * 255) { sz = 0; }
-
-                        else
-                        {
-                            sz = 255 - cl.R;
-                        }
 
                         sz = interpolate(sz, float.Parse(tbLaserMin.Text), float.Parse(tbLaserMax.Text));
                         //sz = interpolate(sz, Convert.ToInt32(tbLaserMin.Text), Convert.ToInt32(tbLaserMax.Text));
