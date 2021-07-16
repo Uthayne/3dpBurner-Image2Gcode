@@ -184,12 +184,14 @@ namespace _3dpBurnerImage2Gcode
             // 
             this.openFileDialog1.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png, *.bmp)| *.jpg; *.jpeg; *.jpe; *" +
     ".jfif; *.png; *.bmp|All files(*.*)|*.*";
+            this.openFileDialog1.RestoreDirectory = true;
             // 
             // saveFileDialog1
             // 
-            this.saveFileDialog1.FileName = ".gco";
-            this.saveFileDialog1.Filter = "G-Code Files(*.GCODE;*.CNC;*.NC;*.TAP;*.TXT)|*.GCO;*.GCODE;*.CNC;*.NC;*.TAP;*.TXT" +
-    "|All files (*.*)|*.*";
+            this.saveFileDialog1.FileName = ".gcode";
+            this.saveFileDialog1.Filter = "G-Code(*.GCODE)|*.gcode|G-Code Files(*.GCODE;*.CNC;*.NC;*.TAP;*.TXT)|*.GCO;*.GCOD" +
+    "E;*.CNC;*.NC;*.TAP;*.TXT|All files (*.*)|*.*";
+            this.saveFileDialog1.RestoreDirectory = true;
             // 
             // lblStatus
             // 
@@ -537,7 +539,6 @@ namespace _3dpBurnerImage2Gcode
             this.rbMax.Name = "rbMax";
             this.rbMax.Size = new System.Drawing.Size(45, 17);
             this.rbMax.TabIndex = 0;
-            this.rbMax.TabStop = true;
             this.rbMax.Text = "Max";
             this.rbMax.UseVisualStyleBackColor = true;
             this.rbMax.CheckedChanged += new System.EventHandler(this.rbMax_CheckedChanged);
@@ -558,7 +559,6 @@ namespace _3dpBurnerImage2Gcode
             this.rbWood.Name = "rbWood";
             this.rbWood.Size = new System.Drawing.Size(54, 17);
             this.rbWood.TabIndex = 1;
-            this.rbWood.TabStop = true;
             this.rbWood.Text = "Wood";
             this.rbWood.UseVisualStyleBackColor = true;
             this.rbWood.CheckedChanged += new System.EventHandler(this.rbWood_CheckedChanged);
@@ -655,7 +655,6 @@ namespace _3dpBurnerImage2Gcode
             this.rbLeather.Name = "rbLeather";
             this.rbLeather.Size = new System.Drawing.Size(61, 17);
             this.rbLeather.TabIndex = 4;
-            this.rbLeather.TabStop = true;
             this.rbLeather.Text = "Leather";
             this.rbLeather.UseVisualStyleBackColor = true;
             this.rbLeather.CheckedChanged += new System.EventHandler(this.rbLeather_CheckedChanged);
@@ -697,7 +696,6 @@ namespace _3dpBurnerImage2Gcode
             this.rbAA.Name = "rbAA";
             this.rbAA.Size = new System.Drawing.Size(117, 17);
             this.rbAA.TabIndex = 7;
-            this.rbAA.TabStop = true;
             this.rbAA.Text = "Anodized Aluminum";
             this.rbAA.UseVisualStyleBackColor = true;
             this.rbAA.CheckedChanged += new System.EventHandler(this.rbAA_CheckedChanged);

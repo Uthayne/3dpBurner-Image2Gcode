@@ -67,9 +67,14 @@ packages/
 #Test files
 *.testsettings
 
-#Add binary fileç
+obj/Debug/
+
+#Add binary fileï¿½
 !/bin
 /bin/*
 !/bin/Release
 /bin/release/*
 !/bin/Release/3dpBurner Image2Gcode.exe
+
+
+*.pdb

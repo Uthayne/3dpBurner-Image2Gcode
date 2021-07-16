@@ -42,6 +42,17 @@ namespace _3dpBurnerImage2Gcode
         {
             InitializeComponent();
             Properties.Settings.Default.Upgrade();
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.srcDir))
+            {
+                openFileDialog1.InitialDirectory = Properties.Settings.Default.srcDir;
+            }
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.dstDir))
+            {
+                saveFileDialog1.InitialDirectory = Properties.Settings.Default.dstDir;
+            }
+            //comboBoxOnCode.SelectedIndex = 1;
+            //comboBoxOffCode.SelectedIndex = 1;
+
         }
         float ratio; //Used to lock the aspect ratio when the option is selected
         //Save settings
@@ -50,10 +61,10 @@ namespace _3dpBurnerImage2Gcode
             try
             {
                 string set;
-                Properties.Settings.Default.autoZoom=autoZoomToolStripMenuItem.Checked;
+                Properties.Settings.Default.autoZoom = autoZoomToolStripMenuItem.Checked;
                 if (imperialinToolStripMenuItem.Checked) set = "imperial";
-                    else set = "metric";
-                Properties.Settings.Default.units =set;
+                else set = "metric";
+                Properties.Settings.Default.units = set;
                 Properties.Settings.Default.width = tbWidth.Text;
                 Properties.Settings.Default.height = tbHeight.Text;
                 Properties.Settings.Default.resolution = tbRes.Text;
@@ -89,34 +100,34 @@ namespace _3dpBurnerImage2Gcode
         {
             try
             {
-                autoZoomToolStripMenuItem.Checked=Properties.Settings.Default.autoZoom;
+                autoZoomToolStripMenuItem.Checked = Properties.Settings.Default.autoZoom;
                 autoZoomToolStripMenuItem_Click(this, null);
 
-                if (Properties.Settings.Default.units=="imperial")
+                if (Properties.Settings.Default.units == "imperial")
                 {
-                    imperialinToolStripMenuItem.Checked=true;
-                    imperialinToolStripMenuItem_Click(this,null);
+                    imperialinToolStripMenuItem.Checked = true;
+                    imperialinToolStripMenuItem_Click(this, null);
                 }
-                else 
+                else
                 {
-                    metricmmToolStripMenuItem.Checked=true;
-                    metricmmToolStripMenuItem_Click(this,null);
+                    metricmmToolStripMenuItem.Checked = true;
+                    metricmmToolStripMenuItem_Click(this, null);
                 }
-                tbWidth.Text=Properties.Settings.Default.width;
-                tbHeight.Text=Properties.Settings.Default.height;
-                tbRes.Text=Properties.Settings.Default.resolution;
-                tbLaserMin.Text=Properties.Settings.Default.minPower;
-                tbLaserMax.Text=Properties.Settings.Default.maxPower;
-                rtbPreGcode.Text=Properties.Settings.Default.header;
-                rtbPostGcode.Text=Properties.Settings.Default.footer;
-                tbFeedRate.Text=Properties.Settings.Default.feedrate;
+                tbWidth.Text = Properties.Settings.Default.width;
+                tbHeight.Text = Properties.Settings.Default.height;
+                tbRes.Text = Properties.Settings.Default.resolution;
+                tbLaserMin.Text = Properties.Settings.Default.minPower;
+                tbLaserMax.Text = Properties.Settings.Default.maxPower;
+                rtbPreGcode.Text = Properties.Settings.Default.header;
+                rtbPostGcode.Text = Properties.Settings.Default.footer;
+                tbFeedRate.Text = Properties.Settings.Default.feedrate;
                 if (Properties.Settings.Default.powerCommand == "Z")
                     rbUseZ.Checked = true;
-                        else rbUseS.Checked = true;
+                else rbUseS.Checked = true;
                 comboBoxOnCode.Text = Properties.Settings.Default.oncode;
                 comboBoxOffCode.Text = Properties.Settings.Default.offcode;
-                cbEngravingPattern.Text=Properties.Settings.Default.pattern;
-                cbEdgeLines.Checked=Properties.Settings.Default.edgeLines;
+                cbEngravingPattern.Text = Properties.Settings.Default.pattern;
+                cbEdgeLines.Checked = Properties.Settings.Default.edgeLines;
                 tbWoodPower.Text = Properties.Settings.Default.woodPower;
                 tbWoodFeed.Text = Properties.Settings.Default.woodFeed;
                 tbLeatherPower.Text = Properties.Settings.Default.leatherPower;
@@ -131,7 +142,7 @@ namespace _3dpBurnerImage2Gcode
 
             }
         }
-        
+
         //Interpolate a 8 bit grayscale value (0-255) between min,max
         private float interpolate(float grayValue, float min, float max) //float grayValue, float min, float max
         {
@@ -140,7 +151,7 @@ namespace _3dpBurnerImage2Gcode
         }
 
         //Return true if char is a valid float digit, show eror message is not and return false
-        private bool checkDigitFloat(char ch )
+        private bool checkDigitFloat(char ch)
         {
             if ((ch != '.') & (ch != '0') & (ch != '1') & (ch != '2') & (ch != '3') & (ch != '4') & (ch != '5') & (ch != '6') & (ch != '7') & (ch != '8') & (ch != '9') & (Convert.ToByte(ch) != 8) & (Convert.ToByte(ch) != 13))//is a 0-9 numbre or . decimal separator, backspace or enter
             {
@@ -159,7 +170,7 @@ namespace _3dpBurnerImage2Gcode
             }
             return true;
         }
-              
+
         //Apply dirthering to an image (Convert to 1 bit)
         private Bitmap imgDirther(Bitmap input)
         {
@@ -227,9 +238,9 @@ namespace _3dpBurnerImage2Gcode
             lblStatus.Text = "Balancing...";
             Refresh();
             ImageAttributes imageAttributes;
-            float brightness = (brigh / 100.0f)+ 1.0f; 
-            float contrast = (cont / 100.0f) +1.0f; 
-            float gamma = 1/(gam / 100.0f) ; 
+            float brightness = (brigh / 100.0f) + 1.0f;
+            float contrast = (cont / 100.0f) + 1.0f;
+            float gamma = 1 / (gam / 100.0f);
             float adjustedBrightness = brightness - 1.0f;
             Bitmap output;
             // create matrix that will brighten and contrast the image
@@ -252,7 +263,7 @@ namespace _3dpBurnerImage2Gcode
             lblStatus.Text = "Done";
             Refresh();
             return (output);
-        }    
+        }
         //Return a grayscale version of an image
         private Bitmap imgGrayscale(Bitmap original)
         {
@@ -262,7 +273,7 @@ namespace _3dpBurnerImage2Gcode
             Graphics g = Graphics.FromImage(newBitmap);//get a graphics object from the new image
             //create the grayscale ColorMatrix
             ColorMatrix colorMatrix = new ColorMatrix(
-               new float[][] 
+               new float[][]
                 {
                     new float[] {.299f, .299f, .299f, 0, 0},
                     new float[] {.587f, .587f, .587f, 0, 0},
@@ -290,7 +301,7 @@ namespace _3dpBurnerImage2Gcode
             Graphics g = Graphics.FromImage(newBitmap);//get a graphics object from the new image
             //create the grayscale ColorMatrix
             ColorMatrix colorMatrix = new ColorMatrix(
-               new float[][] 
+               new float[][]
                 {
                     new float[] {-1, 0, 0, 0, 0},
                     new float[] {0, -1, 0, 0, 0},
@@ -317,10 +328,10 @@ namespace _3dpBurnerImage2Gcode
             Bitmap output;
             lblStatus.Text = "Resizing...";
             Refresh();
-            output= new Bitmap(input,new Size(xSize, ySize));
+            output = new Bitmap(input, new Size(xSize, ySize));
             lblStatus.Text = "Done";
             Refresh();
-            return(output);
+            return (output);
         }
         //Invoked when the user input any value for image adjust
         private void userAdjust()
@@ -353,26 +364,26 @@ namespace _3dpBurnerImage2Gcode
         {
             lblStatus.Text = "Invalid values! Check it.";
         }
-         //Contrast adjusted by user
+        //Contrast adjusted by user
         private void tBarContrast_Scroll(object sender, EventArgs e)
         {
             lblContrast.Text = Convert.ToString(tBarContrast.Value);
             Refresh();
-            userAdjust(); 
+            userAdjust();
         }
         //Brightness adjusted by user
         private void tBarBrightness_Scroll(object sender, EventArgs e)
         {
             lblBrightness.Text = Convert.ToString(tBarBrightness.Value);
             Refresh();
-            userAdjust();          
+            userAdjust();
         }
         //Gamma adjusted by user
         private void tBarGamma_Scroll(object sender, EventArgs e)
         {
-            lblGamma.Text = Convert.ToString(tBarGamma.Value/100.0f);
+            lblGamma.Text = Convert.ToString(tBarGamma.Value / 100.0f);
             Refresh();
-            userAdjust(); 
+            userAdjust();
         }
         //Quick preview of the original image. Todo: use a new image container for fas return to processed image
         private void btnCheckOrig_MouseDown(object sender, MouseEventArgs e)
@@ -383,6 +394,8 @@ namespace _3dpBurnerImage2Gcode
             Refresh();
             pictureBox1.Image = originalImage;
             lblStatus.Text = "Done";
+            Properties.Settings.Default.srcDir = Path.GetDirectoryName(openFileDialog1.FileName);
+            Properties.Settings.Default.Upgrade();
         }
         //Reload the processed image after temporal preiew of the original image
         private void btnCheckOrig_MouseUp(object sender, MouseEventArgs e)
@@ -390,6 +403,8 @@ namespace _3dpBurnerImage2Gcode
             if (adjustedImage == null) return;//if no image, do nothing
             if (!File.Exists(openFileDialog1.FileName)) return;
             pictureBox1.Image = adjustedImage;
+            Properties.Settings.Default.srcDir = Path.GetDirectoryName(openFileDialog1.FileName);
+            Properties.Settings.Default.Upgrade();
         }
 
         //Check if a new image width has been confirmad by user, process it.
@@ -407,7 +422,7 @@ namespace _3dpBurnerImage2Gcode
                 }
                 userAdjust();
             }
-            catch 
+            catch
             {
                 MessageBox.Show("Check width value.", "Invalid value", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -427,7 +442,8 @@ namespace _3dpBurnerImage2Gcode
                 }
                 userAdjust();
             }
-            catch {
+            catch
+            {
                 MessageBox.Show("Check height value.", "Invalid value", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -442,7 +458,8 @@ namespace _3dpBurnerImage2Gcode
                 lastValue = Convert.ToSingle(tbRes.Text, CultureInfo.InvariantCulture.NumberFormat);
                 userAdjust();
             }
-            catch {
+            catch
+            {
                 MessageBox.Show("Check resolution value.", "Invalid value", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -464,29 +481,29 @@ namespace _3dpBurnerImage2Gcode
             loadSettings();
 
 
-#if DEBUG   //Load file automatically if debugging
-            //if (openFileDialog1.ShowDialog() == DialogResult.Cancel) return;//if no image, do nothing
-            openFileDialog1.FileName = "D:\\Pictures\\Debug_Pic.png";
-            if (!File.Exists(openFileDialog1.FileName)) return;
-            lblStatus.Text = "Opening file...";
-            Refresh();
-            tBarBrightness.Value = 0;
-            tBarContrast.Value = 0;
-            tBarGamma.Value = 100;
-            lblBrightness.Text = Convert.ToString(tBarBrightness.Value);
-            lblContrast.Text = Convert.ToString(tBarContrast.Value);
-            lblGamma.Text = Convert.ToString(tBarGamma.Value / 100.0f);
-            originalImage = new Bitmap(Image.FromFile(openFileDialog1.FileName));
-            originalImage = imgGrayscale(originalImage);
-            adjustedImage = new Bitmap(originalImage);
-            ratio = (originalImage.Width + 0.0f) / originalImage.Height;//Save ratio for future use if needled
-            if (cbLockRatio.Checked) tbHeight.Text = Convert.ToString((Convert.ToSingle(tbWidth.Text) / ratio), CultureInfo.InvariantCulture.NumberFormat);//Initialize y size
-            userAdjust();
-            lblStatus.Text = "Done";
-            string fN = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
-            saveFileDialog1.FileName = fN + ".gcode";
-            saveFileDialog1.InitialDirectory = "C:\\Users\\BRYAN\\Desktop";
-#endif
+            //#if DEBUG   //Load file automatically if debugging
+            //            //if (openFileDialog1.ShowDialog() == DialogResult.Cancel) return;//if no image, do nothing
+            //            openFileDialog1.FileName = "D:\\Pictures\\Debug_Pic.png";
+            //            if (!File.Exists(openFileDialog1.FileName)) return;
+            //            lblStatus.Text = "Opening file...";
+            //            Refresh();
+            //            tBarBrightness.Value = 0;
+            //            tBarContrast.Value = 0;
+            //            tBarGamma.Value = 100;
+            //            lblBrightness.Text = Convert.ToString(tBarBrightness.Value);
+            //            lblContrast.Text = Convert.ToString(tBarContrast.Value);
+            //            lblGamma.Text = Convert.ToString(tBarGamma.Value / 100.0f);
+            //            originalImage = new Bitmap(Image.FromFile(openFileDialog1.FileName));
+            //            originalImage = imgGrayscale(originalImage);
+            //            adjustedImage = new Bitmap(originalImage);
+            //            ratio = (originalImage.Width + 0.0f) / originalImage.Height;//Save ratio for future use if needled
+            //            if (cbLockRatio.Checked) tbHeight.Text = Convert.ToString((Convert.ToSingle(tbWidth.Text) / ratio), CultureInfo.InvariantCulture.NumberFormat);//Initialize y size
+            //            userAdjust();
+            //            lblStatus.Text = "Done";
+            //            string fN = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
+            //            saveFileDialog1.FileName = fN + ".gcode";
+            //            saveFileDialog1.InitialDirectory = "C:\\Users\\BRYAN\\Desktop";
+            //#endif
             toolTip1.InitialDelay = 500;
             toolTip1.ShowAlways = true;
 
@@ -502,8 +519,8 @@ namespace _3dpBurnerImage2Gcode
                 return;
             }
 
-            if (e.KeyChar==Convert.ToChar(13))
-            {              
+            if (e.KeyChar == Convert.ToChar(13))
+            {
                 widthChangedCheck();
             }
         }
@@ -517,7 +534,7 @@ namespace _3dpBurnerImage2Gcode
                 return;
             }
             if (e.KeyChar == Convert.ToChar(13))
-            {             
+            {
                 heightChangedCheck();
             }
         }
@@ -581,10 +598,11 @@ namespace _3dpBurnerImage2Gcode
         private String modelOrigin()
         {
             String travel2 = "G0 ";
-            float width = float.Parse(tbWidth.Text);
-            float height = float.Parse(tbHeight.Text);
+            float width = float.Parse(tbWidth.Text, CultureInfo.InvariantCulture.NumberFormat);
+            float height = float.Parse(tbHeight.Text, CultureInfo.InvariantCulture.NumberFormat);
 
-            if (ori0.Checked) {
+            if (ori0.Checked)
+            {
                 //Move from bottom left corner
                 travel2 += "Y" + height;
             }
@@ -592,7 +610,7 @@ namespace _3dpBurnerImage2Gcode
             else if (ori1.Checked)
             {
                 //Move from Bottom mid
-                travel2 += "X-" + width/2 + " Y" + height;
+                travel2 += "X-" + width / 2 + " Y" + height;
             }
 
             else if (ori2.Checked)
@@ -645,7 +663,7 @@ namespace _3dpBurnerImage2Gcode
             travel2 += "G0 X0\r\n";
             return travel2;
         }
-        
+
         //Generate a "minimalist" gcode line based on the actual and last coordinates and laser power
         string line;
         float coordX;//X
@@ -672,7 +690,7 @@ namespace _3dpBurnerImage2Gcode
 
                 if (coordX != lastX)//Experimental Feature.. Optimized Raster based on checkbox           
                 {
-                    if(cbOptimizedRaster.Checked) //If line is allowed and cb is not checked, print line
+                    if (cbOptimizedRaster.Checked) //If line is allowed and cb is not checked, print line
                     {
                         if (!deleteThisLine)
                         {
@@ -680,7 +698,7 @@ namespace _3dpBurnerImage2Gcode
                             coordXStr = string.Format(CultureInfo.InvariantCulture.NumberFormat, "{0:0.###}", coordX);
                             line += 'X' + coordXStr + ' ';// + deleteThisLine;
                         }
-                        
+
                     }
                     else //Optimization not required, continue as usual. (Works for horizontal and diagonal)
                     {
@@ -699,7 +717,7 @@ namespace _3dpBurnerImage2Gcode
                 }
                 //line += "\r";
             }
-           
+
         }
 
         private void generateMLine()
@@ -739,11 +757,13 @@ namespace _3dpBurnerImage2Gcode
                 return;
             }
             if (saveFileDialog1.ShowDialog() == DialogResult.Cancel) return;
+            Properties.Settings.Default.dstDir = Path.GetDirectoryName(saveFileDialog1.FileName);
+            Properties.Settings.Default.Save();
 
             Int32 lin;//top/botom pixel
             Int32 col;//Left/right pixel
 
-            lblStatus.Text="Generating file...";
+            lblStatus.Text = "Generating file...";
             Refresh();
 
             List<string> fileLines;
@@ -753,9 +773,9 @@ namespace _3dpBurnerImage2Gcode
 
 
             //first Gcode line
-            line = "(Generated by 3dpBurner Image2Gcode " + ver+")";
+            line = "(Generated by 3dpBurner Image2Gcode " + ver + ")";
             fileLines.Add(line);
-            line="(@"+DateTime.Now.ToString("MMM/dd/yyy HH:mm:ss)");
+            line = "(@" + DateTime.Now.ToString("MMM/dd/yyy HH:mm:ss)");
             fileLines.Add(line);
 
 
@@ -767,7 +787,7 @@ namespace _3dpBurnerImage2Gcode
             lastX = -1;//reset last positions
             lastY = -1;
             lastSz = -1;
-            foreach(string s in rtbPreGcode.Lines)
+            foreach (string s in rtbPreGcode.Lines)
             {
                 fileLines.Add(s);
             }
@@ -775,7 +795,7 @@ namespace _3dpBurnerImage2Gcode
             fileLines.Add(line);
 
             if (imperialinToolStripMenuItem.Checked) line = "G20\r\n";//Imperial units
-                else line = "G21\r\n";//Metric units
+            else line = "G21\r\n";//Metric units
             fileLines.Add(line);
             line = "F" + tbFeedRate.Text + "\r\n";//Feedrate
             fileLines.Add(line);
@@ -817,14 +837,15 @@ namespace _3dpBurnerImage2Gcode
 
                         if (cl.R < 0.15 * 255) { sz = 0; }
 
-                        else { 
-                        sz = 255 - cl.R;
+                        else
+                        {
+                            sz = 255 - cl.R;
                         }
 
-                        sz = interpolate(sz, float.Parse(tbLaserMin.Text), float.Parse(tbLaserMax.Text));
+                        sz = interpolate(sz, float.Parse(tbLaserMin.Text, CultureInfo.InvariantCulture.NumberFormat), float.Parse(tbLaserMax.Text, CultureInfo.InvariantCulture.NumberFormat));
                         //sz = interpolate(sz, Convert.ToInt32(tbLaserMax.Text), Convert.ToInt32(tbLaserMax.Text));
 
-                        if(cbOptimizedRaster.Checked && sz < float.Parse(tbThreshold.Text)/100 * float.Parse(tbLaserMax.Text))
+                        if (cbOptimizedRaster.Checked && sz < float.Parse(tbThreshold.Text, CultureInfo.InvariantCulture.NumberFormat) / 100 * float.Parse(tbLaserMax.Text, CultureInfo.InvariantCulture.NumberFormat))
                         {
                             sz = 0;
                         }
@@ -869,10 +890,10 @@ namespace _3dpBurnerImage2Gcode
                             sz = 255 - cl.R;
                         }
 
-                        sz = interpolate(sz, float.Parse(tbLaserMin.Text), float.Parse(tbLaserMax.Text));
+                        sz = interpolate(sz, float.Parse(tbLaserMin.Text, CultureInfo.InvariantCulture.NumberFormat), float.Parse(tbLaserMax.Text, CultureInfo.InvariantCulture.NumberFormat));
                         //sz = interpolate(sz, Convert.ToInt32(tbLaserMin.Text), Convert.ToInt32(tbLaserMax.Text));
 
-                        if (cbOptimizedRaster.Checked && sz < float.Parse(tbThreshold.Text) / 100 * float.Parse(tbLaserMax.Text))
+                        if (cbOptimizedRaster.Checked && sz < float.Parse(tbThreshold.Text, CultureInfo.InvariantCulture.NumberFormat) / 100 * float.Parse(tbLaserMax.Text, CultureInfo.InvariantCulture.NumberFormat))
                         {
                             sz = 0;
                         }
@@ -901,7 +922,7 @@ namespace _3dpBurnerImage2Gcode
                     }
                     col++;
                     lin--;
-                    lblStatus.Text = "Generating file... " + Convert.ToString((pixBurned*100)/pixTot ) + "%";
+                    lblStatus.Text = "Generating file... " + Convert.ToString((pixBurned * 100) / pixTot) + "%";
                     Refresh();
                 }
 
@@ -927,115 +948,115 @@ namespace _3dpBurnerImage2Gcode
                 //Start image
                 col = 0;
                 lin = 0;
-            while((col<adjustedImage.Width)|(lin<adjustedImage.Height))          
-            {
-                while ((col < adjustedImage.Width)&(lin>=0))
+                while ((col < adjustedImage.Width) | (lin < adjustedImage.Height))
                 {
-                    //Y coordinate
-                    coordY = resol * (float)lin;
-                    //X coordinate
-                    coordX = resol * (float)col;
+                    while ((col < adjustedImage.Width) & (lin >= 0))
+                    {
+                        //Y coordinate
+                        coordY = resol * (float)lin;
+                        //X coordinate
+                        coordX = resol * (float)col;
 
-                    //Power value
-                    Color cl = adjustedImage.GetPixel(col, (adjustedImage.Height - 1) - lin);//Get pixel color
-                    sz = 255 - cl.R;
+                        //Power value
+                        Color cl = adjustedImage.GetPixel(col, (adjustedImage.Height - 1) - lin);//Get pixel color
+                        sz = 255 - cl.R;
 
-                    sz = interpolate(sz, float.Parse(tbLaserMin.Text), float.Parse(tbLaserMax.Text));
-                    //sz = interpolate(sz, Convert.ToInt32(tbLaserMin.Text), Convert.ToInt32(tbLaserMax.Text));
+                        sz = interpolate(sz, float.Parse(tbLaserMin.Text), float.Parse(tbLaserMax.Text));
+                        //sz = interpolate(sz, Convert.ToInt32(tbLaserMin.Text), Convert.ToInt32(tbLaserMax.Text));
 
-                    if (!cbLaserDecimal.Checked) { sz = Convert.ToInt32(sz); }
+                        if (!cbLaserDecimal.Checked) { sz = Convert.ToInt32(sz); }
 
                         //Preparing for power change, we need coordinate just before so set flag to false
                         if (sz != lastSz)
-                    {
-                      deleteThisLine = false;
-                    }
-
-                    generateLine();
-                    pixBurned++;
-
-                    //adjustedImage.SetPixel(col, (adjustedImage.Height-1)-lin, Color.Red);
-                    //pictureBox1.Image = adjustedImage;
-                    //Refresh();
-
-                    if (!string.IsNullOrEmpty(line)) fileLines.Add(line);
-                    generateMLine();
-                    if (!string.IsNullOrEmpty(line)) fileLines.Add(line);
-                    lastX = coordX;
-                    lastY = coordY;
-                    lastSz = sz;
-
-                    col++;
-                    lin--;
-                }
-                col--;
-                lin++;
-
-                if (col >= adjustedImage.Width-1) lin++;
-                else col++;
-                 while ((col >=0)&(lin<adjustedImage.Height))
-                {
-                    //Y coordinate
-                    coordY = resol * (float)lin;
-                    //X coordinate
-                    coordX = resol * (float)col;
-
-                    //Power value
-                    Color cl = adjustedImage.GetPixel(col, (adjustedImage.Height - 1) - lin);//Get pixel color
-                    sz = 255 - cl.R;
-
-                    sz = interpolate(sz, float.Parse(tbLaserMin.Text), float.Parse(tbLaserMax.Text));
-                    //sz = interpolate(sz, Convert.ToInt32(tbLaserMin.Text), Convert.ToInt32(tbLaserMax.Text));
-
-                    if (!cbLaserDecimal.Checked) { sz = Convert.ToInt32(sz); }
-                        
-                    //Preparing for power change, we need coordinate just before so set flag to false
-                    if (sz != lastSz)
                         {
                             deleteThisLine = false;
                         }
 
                         generateLine();
-                    pixBurned++;
-                    
-                    //adjustedImage.SetPixel(col, (adjustedImage.Height-1)-lin, Color.Red);
-                    //pictureBox1.Image = adjustedImage;
-                   // Refresh();
+                        pixBurned++;
 
-                    if (!string.IsNullOrEmpty(line)) fileLines.Add(line);
-                    generateMLine();
-                    if (!string.IsNullOrEmpty(line)) fileLines.Add(line);
-                    lastX = coordX;
-                    lastY = coordY;
-                    lastSz = sz;
+                        //adjustedImage.SetPixel(col, (adjustedImage.Height-1)-lin, Color.Red);
+                        //pictureBox1.Image = adjustedImage;
+                        //Refresh();
 
+                        if (!string.IsNullOrEmpty(line)) fileLines.Add(line);
+                        generateMLine();
+                        if (!string.IsNullOrEmpty(line)) fileLines.Add(line);
+                        lastX = coordX;
+                        lastY = coordY;
+                        lastSz = sz;
+
+                        col++;
+                        lin--;
+                    }
                     col--;
                     lin++;
+
+                    if (col >= adjustedImage.Width - 1) lin++;
+                    else col++;
+                    while ((col >= 0) & (lin < adjustedImage.Height))
+                    {
+                        //Y coordinate
+                        coordY = resol * (float)lin;
+                        //X coordinate
+                        coordX = resol * (float)col;
+
+                        //Power value
+                        Color cl = adjustedImage.GetPixel(col, (adjustedImage.Height - 1) - lin);//Get pixel color
+                        sz = 255 - cl.R;
+
+                        sz = interpolate(sz, float.Parse(tbLaserMin.Text, CultureInfo.InvariantCulture.NumberFormat), float.Parse(tbLaserMax.Text, CultureInfo.InvariantCulture.NumberFormat));
+                        //sz = interpolate(sz, Convert.ToInt32(tbLaserMin.Text), Convert.ToInt32(tbLaserMax.Text));
+
+                        if (!cbLaserDecimal.Checked) { sz = Convert.ToInt32(sz); }
+
+                        //Preparing for power change, we need coordinate just before so set flag to false
+                        if (sz != lastSz)
+                        {
+                            deleteThisLine = false;
+                        }
+
+                        generateLine();
+                        pixBurned++;
+
+                        //adjustedImage.SetPixel(col, (adjustedImage.Height-1)-lin, Color.Red);
+                        //pictureBox1.Image = adjustedImage;
+                        // Refresh();
+
+                        if (!string.IsNullOrEmpty(line)) fileLines.Add(line);
+                        generateMLine();
+                        if (!string.IsNullOrEmpty(line)) fileLines.Add(line);
+                        lastX = coordX;
+                        lastY = coordY;
+                        lastSz = sz;
+
+                        col--;
+                        lin++;
+                    }
+                    col++;
+                    lin--;
+                    if (lin >= adjustedImage.Height - 1) col++;
+                    else lin++;
+                    lblStatus.Text = "Generating file... " + Convert.ToString((pixBurned * 100) / pixTot) + "%";
+                    Refresh();
                 }
-                 col++;
-                 lin--;
-                 if (lin >= adjustedImage.Height-1) col++;
-                 else lin++;
-                 lblStatus.Text = "Generating file... " + Convert.ToString((pixBurned * 100) / pixTot) + "%"; 
-                 Refresh();
-            }
 
 
             }
             //Edge lines
             if (cbEdgeLines.Checked)
             {
-                line = comboBoxOffCode.Text +"\r";
+                line = comboBoxOffCode.Text + "\r";
                 fileLines.Add(line);
                 line = "G0 X0 Y0\r";
                 fileLines.Add(line);
                 line = szChar + tbLaserMax.Text + "\r";
                 fileLines.Add(line);
-                line = "G1 X0 Y"+string.Format(CultureInfo.InvariantCulture.NumberFormat,"{0:0.###}",(adjustedImage.Height-1)*resol)+"\r";
+                line = "G1 X0 Y" + string.Format(CultureInfo.InvariantCulture.NumberFormat, "{0:0.###}", (adjustedImage.Height - 1) * resol) + "\r";
                 fileLines.Add(line);
-                line = "G1 X" + string.Format(CultureInfo.InvariantCulture.NumberFormat, "{0:0.###}", (adjustedImage.Width - 1) * resol) + " Y" +string.Format(CultureInfo.InvariantCulture.NumberFormat, "{0:0.###}",(adjustedImage.Height - 1) * resol) + "\r";
+                line = "G1 X" + string.Format(CultureInfo.InvariantCulture.NumberFormat, "{0:0.###}", (adjustedImage.Width - 1) * resol) + " Y" + string.Format(CultureInfo.InvariantCulture.NumberFormat, "{0:0.###}", (adjustedImage.Height - 1) * resol) + "\r";
                 fileLines.Add(line);
-                line = "G1 X" + string.Format(CultureInfo.InvariantCulture.NumberFormat, "{0:0.###}",(adjustedImage.Width - 1)*resol) + " Y0\r";
+                line = "G1 X" + string.Format(CultureInfo.InvariantCulture.NumberFormat, "{0:0.###}", (adjustedImage.Width - 1) * resol) + " Y0\r";
                 fileLines.Add(line);
                 line = "G1 X0 Y0\r";
                 fileLines.Add(line);
@@ -1049,11 +1070,11 @@ namespace _3dpBurnerImage2Gcode
             {
                 fileLines.Add(s);
             }
-            lblStatus.Text="Saving file...";
+            lblStatus.Text = "Saving file...";
             Refresh();
             //Save file
-            File.WriteAllLines(saveFileDialog1.FileName , fileLines);
-            lblStatus.Text = "Done (" + Convert.ToString(pixBurned) + "/" + Convert.ToString(pixTot)+")";
+            File.WriteAllLines(saveFileDialog1.FileName, fileLines);
+            lblStatus.Text = "Done (" + Convert.ToString(pixBurned) + "/" + Convert.ToString(pixTot) + ")";
         }
         //Horizontal mirroring
         private void btnHorizMirror_Click(object sender, EventArgs e)
@@ -1114,7 +1135,7 @@ namespace _3dpBurnerImage2Gcode
         {
             if (adjustedImage == null) return;//if no image, do nothing
             adjustedImage = imgInvert(adjustedImage);
-            originalImage= imgInvert(originalImage);
+            originalImage = imgInvert(originalImage);
             pictureBox1.Image = adjustedImage;
         }
 
@@ -1228,6 +1249,8 @@ namespace _3dpBurnerImage2Gcode
                 if (openFileDialog1.ShowDialog() == DialogResult.Cancel) return;//if no image, do nothing
                 if (!File.Exists(openFileDialog1.FileName)) return;
                 lblStatus.Text = "Opening file...";
+                Properties.Settings.Default.srcDir = Path.GetDirectoryName(openFileDialog1.FileName);
+                Properties.Settings.Default.Save();
                 Refresh();
                 tBarBrightness.Value = 0;
                 tBarContrast.Value = 0;
@@ -1243,7 +1266,7 @@ namespace _3dpBurnerImage2Gcode
                 userAdjust();
                 lblStatus.Text = "Done";
                 string fN = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
-                saveFileDialog1.FileName = fN + ".gco";
+                saveFileDialog1.FileName = fN + ".gcode";
             }
             catch (Exception err)
             {
@@ -1371,7 +1394,7 @@ namespace _3dpBurnerImage2Gcode
         {
             if (cbOptimizedRaster.Checked)
             {
-                cbEngravingPattern.Text="Horizontal scanning";
+                cbEngravingPattern.Text = "Horizontal scanning";
                 tbThreshold.Enabled = true;
             }
             else
